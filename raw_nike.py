@@ -6,41 +6,6 @@ import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-
-def process_cookie_file(file_path):
-    """
-    Reads the cookie file, which may originally be structured like:
-    {"cookies": [ { ... }, { ... } ]}
-    This function converts it into a list of cookie dicts and also removes
-    any leading dots from the domain names.
-    """
-    # Read the file content as JSON.
-    with open(file_path, "r") as f:
-        data = json.load(f)
-    
-    # If the JSON object is wrapped with a "cookies" key, unpack it.
-    cookies = data.get("cookies", data)
-    
-    # Clean up each cookie by removing a leading dot from the domain if present.
-    for cookie in cookies:
-        domain = cookie.get("domain")
-        if domain and domain.startswith("."):
-            cookie["domain"] = domain.lstrip(".")
-    
-    return cookies
-
-
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
-from selenium.webdriver.common.action_chains import ActionChains
-
-import time
-from selenium.webdriver.common.action_chains import ActionChains
-
-
-
-
-
 import re
 import time
 import os
@@ -56,20 +21,7 @@ import logging
 
 
 
-api_url = "http://18.171.168.179:20017/generate"
-documents_path = os.path.join(os.path.expanduser("~"), "Documents")
-cookie_file1 = os.path.join(documents_path, "cookies1.txt")
-cookie_file1 = os.path.abspath(cookie_file1)
-cookie_file = os.path.join(documents_path, "cookieskick")
-cookie_file = os.path.abspath(cookie_file)
-current_folder = os.getcwd()
-saved_cookies_folder = os.path.join(current_folder, "saved_cookies")
-output_filename = "processed_cookies.txt"
-try:
-    processed_cookie_file = process_and_save_cookie_file(cookie_file, saved_cookies_folder, output_filename)
-except:
-    processed_cookie_file = ""
-cookie_file = os.path.join(saved_cookies_folder,processed_cookie_file)
+
 chatter = 0
 from seleniumbase.core.sb_cdp import CDPMethods
 def slower_gui_drag_and_drop(self, drag_selector, drop_selector, timeframe=0.35):
@@ -149,9 +101,6 @@ def retrieve_and_lock_random_cookie():
         client.close()
 
 
-#cookie = retrieve_and_lock_random_cookie()
-
-#,proxy="socks5://127.0.0.1:9052"
 from seleniumbase import BaseCase
 CDPMethods.gui_drag_and_drop = slower_gui_drag_and_drop
 BaseCase.main(__name__, __file__)
@@ -284,14 +233,6 @@ class MyTestClass(BaseCase):
         print(email_text)
         return email_text
     def insert_cookie(self,cookie_value):
-        """
-        Connects to the 'trocu' database and inserts a new document into the 'cookiesk' collection.
-        The document contains:
-        - 'cookies': the provided cookie_value.
-        - 'is_locked': set to False by default.
-        
-        Returns the inserted document's ID or None if an error occurs.
-        """
         MONGO_URI = "mongodb+srv://trocupocu:BE5fESTFMj0TdO2Q@chatdata.rmtsfd5.mongodb.net/?retryWrites=true&w=majority&appName=chatdata"
         try:
             client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=True)
@@ -554,17 +495,6 @@ class MyTestClass(BaseCase):
         rnd = random.randint(3,7)
         self.sleep(rnd)
         self.cdp.gui_drag_and_drop("div[data-orientation='vertical']", "//button[contains(., 'I accept')]", timeframe=rnd)
-        '''bara = self.cdp.find_element("div[data-orientation='vertical']")
-        posbara = bara.get_position()
-        #self.hover("div[data-orientation='vertical']")
-        #self.cdp.click("div[data-orientation='vertical']")
-        self.sleep(2)
-        y_off=100
-        while not self.is_element_enabled("//button[contains(., 'I accept')]"):
-            y_off +=15
-            finaly = posbara.y+y_off
-            self.cdp.gui_click_x_y(posbara.x,finaly)
-            #self.click_with_offset("div[data-orientation='vertical']",x=0,y=y_off)'''
         self.sleep(2)
         self.cdp.click("//button[contains(., 'I accept')]")
         #self.cdp.gui_hover_and_click("//button[contains(., 'I accept')]","//button[contains(., 'I accept')]")
@@ -572,9 +502,7 @@ class MyTestClass(BaseCase):
     def create_acc(self):
         #self.cdp.click('button:contains("Sign Up")')
         kkk = 0
-        while not self.is_element_present("input[name='email']"):
-            #self.cdp.gui_hover_and_click('button:contains("Sign Up")', 'button:contains("Sign Up")')
-            
+        while not self.is_element_present("input[name='email']"):         
             self.cdp.click('button:contains("Sign Up")')
             rnd = random.randint(12,17)
             self.sleep(rnd)
@@ -649,13 +577,6 @@ class MyTestClass(BaseCase):
         return random_birth_date.strftime("%m%d%Y")
 
     def generate_strong_password(self,length=12):
-        """
-        Generate a cryptographically secure random strong password.
-
-        The password will have at least one lowercase letter, one uppercase letter,
-        one digit, and one special character (punctuation). The overall length of the
-        password must be a minimum of 8 characters.
-        """
         if length < 8:
             raise ValueError("Password length should be at least 8 characters")
 
@@ -682,13 +603,6 @@ class MyTestClass(BaseCase):
         secrets.SystemRandom().shuffle(password_chars)
         return ''.join(password_chars)
     def retrieve_and_delete_first_chat_entry(self):
-        """
-        Connects to the MongoDB Atlas collection 'chat', retrieves the first document (sorted by _id)
-        by extracting the 'chattext' field, and then deletes that document.
-        
-        Returns:
-            The value of 'chattext' from the retrieved document, or None if no document is found.
-        """
         MONGO_URI = "mongodb+srv://trocupocu:BE5fESTFMj0TdO2Q@chatdata.rmtsfd5.mongodb.net/?retryWrites=true&w=majority&appName=chatdata"
         try:
             client = MongoClient(MONGO_URI,tls=True,tlsAllowInvalidCertificates=True)
@@ -715,17 +629,6 @@ class MyTestClass(BaseCase):
             client.close()
 
     def get_generated_message(url, prompt):
-        """
-        Send a prompt to the given URL and return the generated message.
-        
-        Args:
-            url (str): The API endpoint URL.
-            prompt (str): The prompt to send.
-        
-        Returns:
-            str or None: The generated message from the 'generated_message' key if successful,
-                        otherwise None in case of a timeout, error, or empty response.
-        """
         prompt = str(prompt)
         payload = {"prompt": prompt}
         print(prompt)
@@ -762,7 +665,6 @@ class MyTestClass(BaseCase):
             #original_handle = self.current_window_handle
             rnd = random.randint(1,4)
             self.sleep(rnd)
-            #####self.maximize()
             self.uc_gui_click_captcha()
             #self.set_window_size(640, 480)
             rnd = random.randint(4,7)
@@ -784,7 +686,6 @@ class MyTestClass(BaseCase):
                 kkk +=1
                 if kkk == 5:
                     sys.exit(0)
-            #try:
             rnd = random.randint(10,10)
             if (rnd == 10):
                 self.create_acc()
@@ -792,34 +693,6 @@ class MyTestClass(BaseCase):
                 cookie_value = self.execute_cdp_cmd('Storage.getCookies', cmd_args={})
                 print(cookie_value)
                 inserted_id = self.insert_cookie(cookie_value)
-            '''            #except Exception as e:
-            #    print(e)
-            #    self.switch_to_window(0) 
-
-            url = "https://kick.com/brutalles"
-            self.cdp.open(url)
-            rnd = random.randint(2,10)
-            self.sleep(rnd)
-            if True:             
-                
-
-                if self.is_element_present('button:contains("Accept")'):
-                    self.cdp.click('button:contains("Accept")')
-                if self.is_element_present('button:contains("agree")'):
-                    self.cdp.click('button:contains("agree")')
-                if not self.is_element_present("p.editor-paragraph"):
-                    self.switch_to_window(0)
-                rnd = random.randint(1,24)
-                self.sleep(rnd)
-                while not self.is_element_present('button:contains("Follow")'):
-                    self.switch_to_window(0)
-                    rnd = random.randint(10,20)
-                    self.sleep(rnd)
-                self.cdp.click('button:contains("Follow")')
-                rnd = random.randint(10,20)
-
-                self.sleep(rnd)
-                self.cdp.click('button:contains("Follow")')'''
         assert True
 
 
