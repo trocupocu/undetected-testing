@@ -1,7 +1,7 @@
 from seleniumbase import SB
 
 with SB(uc=True, test=True, locale_code="en") as sb:
-    url = "https://gitlab.com/users/sign_in"
+    url = "https://kick.com/browse"
     sb.activate_cdp_mode(url)
     sb.uc_gui_click_captcha()
     sb.assert_text("Username", '[for="user_login"]', timeout=3)
