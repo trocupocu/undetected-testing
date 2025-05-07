@@ -145,35 +145,37 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         sb.uc_gui_click_captcha()
         sb.sleep(2)
         sb.uc_gui_handle_captcha()
-        sb.cdp.save_screenshot("ssasa.png", folder='./latest_logs')
+        sb.save_screenshot("ssasa.png", folder='./latest_logs')
         rnd = random.randint(1, 10)
         sb.sleep(rnd)
         kkk += 1
         if kkk == 5:
-            sb.cdp.save_screenshot("screenshot.png")
+            sb.save_screenshot("screenshot.png")
             break
     sb.uc_click('button:contains("Sign Up")', reconnect_time=4)
     driver2 = sb.get_new_driver(undetectable=True)
     url = "https://mail.tm/en/"
     driver2.uc_open_with_reconnect(url)
     email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
-    sb.uc_gui_press_keys("input[name='email']", email_value)
-    sb.uc_gui_press_keys("input[name='username']", generate_gamer_username())
+    sb.uc_click("input[name='email']", reconnect_time=4)
+    sb.uc_gui_press_keys(email_value)
+    sb.uc_click("input[name='username']", reconnect_time=4)
+    sb.uc_gui_press_keys(generate_gamer_username())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    sb.uc_gui_press_keys("input[name='birthdate']",
-                         generate_random_birth_date())
+    sb.uc_click("input[name='birthdate']", reconnect_time=4)
+    sb.uc_gui_press_keys(generate_random_birth_date())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    sb.uc_gui_press_keys("input[name='password']",
-                         generate_strong_password())
+    sb.uc_click("input[name='password']", reconnect_time=4)
+    sb.uc_gui_press_keys(generate_strong_password())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
     if sb.is_element_present("p.text-danger-lower"):
         rnd = random.randint(5, 15)
         random_letter = random.choice(string.ascii_uppercase)
-        sb.uc_gui_press_keys("input[name='username']",
-                             f"{generate_gamer_username()}")
+        sb.uc_click("input[name='username']", reconnect_time=4)
+        sb.uc_gui_press_keys(f"{generate_gamer_username()}")
         sb.sleep(rnd)
     kkk = 0
     while not sb.is_element_present("input[name='code']"):
@@ -202,6 +204,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     match = re.search(r"(\d{6})\s*-\s*Sign Up Verification Code", email_text)
     if match:
         verification_code = match.group(1)
-    sb.uc_gui_press_keys("input[name='code']", verification_code)
-    sb.uc_click("button[type='submit']")
+    sb.uc_click("input[name='code']", reconnect_time=4)
+    sb.uc_gui_press_keys(verification_code)
+    sb.uc_click("button[type='submit']", reconnect_time=4)
 display.stop()
