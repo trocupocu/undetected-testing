@@ -74,6 +74,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     kkk = 0
     while not sb.is_element_present('button:contains("Sign Up")'):
         sb.uc_gui_click_captcha()
+        sb.cdp.save_screenshot("ssasa.png", folder='./latest_logs')
         rnd = random.randint(1, 10)
         sb.sleep(rnd)
         kkk += 1
