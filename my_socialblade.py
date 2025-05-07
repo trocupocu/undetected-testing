@@ -53,7 +53,7 @@ def generate_strong_password(length=12):
 
 
 with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
-    url = "https://kick.com/browse"
+    url = "https://kick.com/brutalles"
     sb.activate_cdp_mode(url)
     rnd = random.randint(4, 7)
     sb.sleep(rnd)
