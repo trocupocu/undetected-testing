@@ -68,6 +68,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
                         "Chrome/135.0.0.0 Safari/537.36"
             )
         )
+    )
     rnd = random.randint(4, 7)
     sb.sleep(rnd)
     sb.uc_gui_click_captcha()
