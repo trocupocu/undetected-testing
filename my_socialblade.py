@@ -7,6 +7,8 @@ from seleniumbase import SB
 
 
 MONGO_URI = os.getenv("MONGO_URI")
+
+
 def subtract_years(date, years):
     try:
         return date.replace(year=date.year - years)
