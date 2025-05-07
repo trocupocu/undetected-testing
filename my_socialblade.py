@@ -56,10 +56,16 @@ def generate_strong_password(length=12):
 display = Display(visible=0, size=(1440, 1880))
 display.start()
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
-    url = "https://kick.com/brutalles"
-    sb.activate_cdp_mode(url, platform='Win32',
-                         user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64)
-                         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36')
+    url = "https://kick.com/browse"
+    self.activate_cdp_mode(
+        url,
+        platform='Win32',
+        user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/135.0.0.0 Safari/537.36"
+                )
+    )
     rnd = random.randint(4, 7)
     sb.sleep(rnd)
     sb.uc_gui_click_captcha()
