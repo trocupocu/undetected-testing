@@ -57,20 +57,14 @@ display = Display(visible=0, size=(1440, 1880))
 display.start()
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/browse"
-    sb.activate_cdp_mode(
-        url,
-        platform='Win32',
-        user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/135.0.0.0 Safari/537.36")
-    )
-    rnd = random.randint(4, 7)
+    sb.uc_open_with_reconnect(url, 5)
+    rnd = random.randint(0, 7)
     sb.sleep(rnd)
     sb.uc_gui_click_captcha()
     sb.sleep(2)
     sb.uc_gui_handle_captcha()
     try:
-        sb.cdp.mouse_click('button:contains("Accept")')
+        sb.uc_click('button:contains("Accept")', reconnect_time=4)
     except Exception as e:
         print(e)
     kkk = 0
@@ -85,4 +79,5 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         if kkk == 5:
             sb.cdp.save_screenshot("screenshot.png")
             break
+    sb.uc_click('button:contains("Sign Up")', reconnect_time=4)
 display.stop()
