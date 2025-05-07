@@ -3,6 +3,7 @@ import string
 import secrets
 import datetime
 import os
+import re
 from seleniumbase import SB
 from sbvirtualdisplay import Display
 
@@ -25,35 +26,55 @@ def generate_gamer_username():
         "Epic", "Wild", "Cosmic", "Vicious", "Stealthy",
         "Mighty", "Hyper", "Electric", "Galactic", "Neon",
         "Infernal", "Infinite", "Blazing", "Thunder", "Luminous",
-        "Phantom", "Obsidian", "Savage", "Raging", "Metal","Epic", "Legendary",
+        "Phantom", "Obsidian", "Savage", "Raging", "Metal",
+        "Epic", "Legendary",
         "Mythic", "Vivid", "Radiant", "Stellar", "Cosmic",
-        "Mysterious", "Infinite", "Dynamic", "Electric", "Astro", "Galactic", "Neon",
-        "Futuristic", "Retro", "Crimson", "Sapphire", "Emerald", "Cobalt", "Amber",
-        "Golden", "Shadow", "Phantom", "Silent", "Vortex", "Frozen", "Sonic", "Ultra",
-        "Blazing", "Lunar", "Solar", "Obsidian", "Celestial", "Brave", "Bold", "Wild",
-        "Enchanted", "Majestic", "Eternal", "Gravity", "Virtuous", "Mystic", "Arcane",
-        "Vibrant", "Mercurial", "Primal", "Savage", "Rogue", "Sleek", "Stealthy", "Fierce"
-    ]    
+        "Mysterious", "Infinite", "Dynamic", "Electric", "Astro",
+        "Galactic", "Neon",
+        "Futuristic", "Retro", "Crimson", "Sapphire", "Emerald",
+        "Cobalt", "Amber",
+        "Golden", "Shadow", "Phantom", "Silent", "Vortex",
+        "Frozen", "Sonic", "Ultra",
+        "Blazing", "Lunar", "Solar", "Obsidian", "Celestial",
+        "Brave", "Bold", "Wild",
+        "Enchanted", "Majestic", "Eternal", "Gravity",
+        "Virtuous", "Mystic", "Arcane",
+        "Vibrant", "Mercurial", "Primal", "Savage",
+        "Rogue", "Sleek", "Stealthy", "Fierce"
+    ]
     nouns = [
         "Warrior", "Ninja", "Ranger", "Samurai", "Archer",
         "Viking", "Slayer", "Hunter", "Assassin", "Gladiator",
         "Dragon", "Phoenix", "Reaper", "Knight", "Vortex",
         "Storm", "Surge", "Maestro", "Specter", "Maverick",
-        "Titan", "Nebula", "Cyclone", "Bolt", "Rebel",    "Ninja", "Dragon",
+        "Titan", "Nebula", "Cyclone", "Bolt", "Rebel",
+        "Ninja", "Dragon",
         "Phoenix", "Viper", "Falcon", "Tiger", "Wolf", "Samurai",
-        "Wizard", "Viking", "Knight", "Storm", "Raven", "Shadow", "Rebel", "Ghost",
-        "Specter", "Titan", "Raider", "Champion", "Assassin", "Warrior", "Guardian",
-        "Jester", "Sphinx", "Galaxy", "Comet", "Nebula", "Meteor", "Quantum", "Pixel",
-        "Jolt", "Blitz", "Cyclone", "Stallion", "Ranger", "Rogue", "Maverick", "Pioneer",
-        "Pirate", "Renegade", "Prophet", "Saber", "Cyborg", "Reaper", "Hurricane",
-        "Thunder", "Serpent", "Vortex", "Rift", "Eclipse", "Rider", "Sonic"
-    ]    
+        "Wizard", "Viking", "Knight", "Storm", "Raven",
+        "Shadow", "Rebel", "Ghost",
+        "Specter", "Titan", "Raider", "Champion", "Assassin",
+        "Warrior", "Guardian",
+        "Jester", "Sphinx", "Galaxy", "Comet", "Nebula", "Meteor",
+        "Quantum", "Pixel",
+        "Jolt", "Blitz", "Cyclone", "Stallion", "Ranger", "Rogue",
+        "Maverick", "Pioneer",
+        "Pirate", "Renegade", "Prophet", "Saber", "Cyborg",
+        "Reaper", "Hurricane",
+        "Thunder", "Serpent", "Vortex", "Rift", "Eclipse",
+        "Rider", "Sonic"
+    ]
     # Choose a random adjective and noun from the lists.
     chosen_adj = random.choice(adjectives)
     chosen_noun = random.choice(nouns)
     # Randomize the case for each chosen word.
-    randomized_adj = chosen_adj.upper() if random.choice([True, False]) else chosen_adj.lower()
-    randomized_noun = chosen_noun.upper() if random.choice([True, False]) else chosen_noun.lower()
+    if random.choice([True, False]):
+        randomized_adj = chosen_adj.upper() 
+    else:
+        randomized_adj = chosen_adj.lower()
+    if random.choice([True, False]):
+        randomized_noun = chosen_noun.upper()
+    else:
+        randomized_noun = chosen_noun.lower()            
     if random.choice([True, False]):
         if random.choice([True, False]):
             randomized_adj = random.randint(0, 9)
@@ -135,40 +156,43 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
     sb.uc_gui_press_keys("input[name='email']", email_value)
     sb.uc_gui_press_keys("input[name='username']", generate_gamer_username())
-    rnd = random.randint(1,5)
+    rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    sb.uc_gui_press_keys("input[name='birthdate']", generate_random_birth_date())
-    rnd = random.randint(1,5)
+    sb.uc_gui_press_keys("input[name='birthdate']",
+                         generate_random_birth_date())
+    rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    sb.uc_gui_press_keys("input[name='password']", generate_strong_password())
-    rnd = random.randint(1,5)
+    sb.uc_gui_press_keys("input[name='password']",
+                         generate_strong_password())
+    rnd = random.randint(1, 5)
     sb.sleep(rnd)
     if sb.is_element_present("p.text-danger-lower"):
-        rnd = random.randint(5,15)
+        rnd = random.randint(5, 15)
         random_letter = random.choice(string.ascii_uppercase)
-        sb.uc_gui_press_keys("input[name='username']", f"{generate_gamer_username()}")
+        sb.uc_gui_press_keys("input[name='username']",
+                             f"{generate_gamer_username()}")
         sb.sleep(rnd)
     kkk = 0
     while not sb.is_element_present("input[name='code']"):
         sb.uc_click('[data-test="sign-up-submit"]')
-        rnd = random.randint(1,17)
+        rnd = random.randint(1, 17)
         sb.sleep(rnd)
-        kkk +=1
+        kkk += 1
         if kkk >= 5:
             break
     driver2.refresh()
     kkk = 0
     while not driver2.is_element_present("div.truncate"):
         driver2.uc_open_with_reconnect("https://mail.tm/en/")
-        rnd = random.randint(1,9)
+        rnd = random.randint(1, 9)
         driver2.sleep(rnd)
         driver2.refresh()
         driver2.sleep(rnd)
-        kkk +=1
+        kkk += 1
         if kkk >= 10:
             break
     driver2.uc_click("div.truncate")
-    rnd = random.randint(2,5)
+    rnd = random.randint(2, 5)
     driver2.sleep(rnd)
     email_text = driver2.get_text("h2[class*='text-2xl']")
     sb.quit_extra_driver()
