@@ -18,7 +18,56 @@ def subtract_years(date, years):
         return date.replace(month=2, day=28, year=date.year - years)
 
 
-def generate_random_birth_date(self):
+def generate_gamer_username():
+    # Expanded lists of cool adjectives and nouns.
+    adjectives = [
+        "Swift", "Silent", "Fierce", "Mystic", "Shadow",
+        "Epic", "Wild", "Cosmic", "Vicious", "Stealthy",
+        "Mighty", "Hyper", "Electric", "Galactic", "Neon",
+        "Infernal", "Infinite", "Blazing", "Thunder", "Luminous",
+        "Phantom", "Obsidian", "Savage", "Raging", "Metal","Epic", "Legendary",
+        "Mythic", "Vivid", "Radiant", "Stellar", "Cosmic",
+        "Mysterious", "Infinite", "Dynamic", "Electric", "Astro", "Galactic", "Neon",
+        "Futuristic", "Retro", "Crimson", "Sapphire", "Emerald", "Cobalt", "Amber",
+        "Golden", "Shadow", "Phantom", "Silent", "Vortex", "Frozen", "Sonic", "Ultra",
+        "Blazing", "Lunar", "Solar", "Obsidian", "Celestial", "Brave", "Bold", "Wild",
+        "Enchanted", "Majestic", "Eternal", "Gravity", "Virtuous", "Mystic", "Arcane",
+        "Vibrant", "Mercurial", "Primal", "Savage", "Rogue", "Sleek", "Stealthy", "Fierce"
+    ]    
+    nouns = [
+        "Warrior", "Ninja", "Ranger", "Samurai", "Archer",
+        "Viking", "Slayer", "Hunter", "Assassin", "Gladiator",
+        "Dragon", "Phoenix", "Reaper", "Knight", "Vortex",
+        "Storm", "Surge", "Maestro", "Specter", "Maverick",
+        "Titan", "Nebula", "Cyclone", "Bolt", "Rebel",    "Ninja", "Dragon",
+        "Phoenix", "Viper", "Falcon", "Tiger", "Wolf", "Samurai",
+        "Wizard", "Viking", "Knight", "Storm", "Raven", "Shadow", "Rebel", "Ghost",
+        "Specter", "Titan", "Raider", "Champion", "Assassin", "Warrior", "Guardian",
+        "Jester", "Sphinx", "Galaxy", "Comet", "Nebula", "Meteor", "Quantum", "Pixel",
+        "Jolt", "Blitz", "Cyclone", "Stallion", "Ranger", "Rogue", "Maverick", "Pioneer",
+        "Pirate", "Renegade", "Prophet", "Saber", "Cyborg", "Reaper", "Hurricane",
+        "Thunder", "Serpent", "Vortex", "Rift", "Eclipse", "Rider", "Sonic"
+    ]    
+    # Choose a random adjective and noun from the lists.
+    chosen_adj = random.choice(adjectives)
+    chosen_noun = random.choice(nouns)
+    # Randomize the case for each chosen word.
+    randomized_adj = chosen_adj.upper() if random.choice([True, False]) else chosen_adj.lower()
+    randomized_noun = chosen_noun.upper() if random.choice([True, False]) else chosen_noun.lower()
+    if random.choice([True, False]):
+        if random.choice([True, False]):
+            randomized_adj = random.randint(0, 9)
+        else:
+            randomized_noun = random.randint(0, 9)
+    # Add a random two-digit number to the username.
+    number = random.randint(0, 99)
+    # Format the number with leading zeros for consistency.
+    username1 = f"{randomized_adj}{randomized_noun}{number:02d}"
+    username = username1.upper() if random.choice([True, False]) else username1.lower()
+    return username
+
+
+def generate_random_birth_date():
     today = datetime.date.today()
     start_date = subtract_years(today, 70)  # 70 years ago
     end_date = subtract_years(today, 18)    # 18 years ago
@@ -80,4 +129,52 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
             sb.cdp.save_screenshot("screenshot.png")
             break
     sb.uc_click('button:contains("Sign Up")', reconnect_time=4)
+    driver2 = sb.get_new_driver(undetectable=True)
+    url = "https://mail.tm/en/"
+    driver2.uc_open_with_reconnect(url)
+    email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
+    sb.uc_gui_press_keys("input[name='email']", email_value)
+    sb.uc_gui_press_keys("input[name='username']", generate_gamer_username())
+    rnd = random.randint(1,5)
+    sb.sleep(rnd)
+    sb.uc_gui_press_keys("input[name='birthdate']", generate_random_birth_date())
+    rnd = random.randint(1,5)
+    sb.sleep(rnd)
+    sb.uc_gui_press_keys("input[name='password']", generate_strong_password())
+    rnd = random.randint(1,5)
+    sb.sleep(rnd)
+    if sb.is_element_present("p.text-danger-lower"):
+        rnd = random.randint(5,15)
+        random_letter = random.choice(string.ascii_uppercase)
+        sb.uc_gui_press_keys("input[name='username']", f"{generate_gamer_username()}")
+        sb.sleep(rnd)
+    kkk = 0
+    while not sb.is_element_present("input[name='code']"):
+        sb.uc_click('[data-test="sign-up-submit"]')
+        rnd = random.randint(1,17)
+        sb.sleep(rnd)
+        kkk +=1
+        if kkk >= 5:
+            break
+    driver2.refresh()
+    kkk = 0
+    while not driver2.is_element_present("div.truncate"):
+        driver2.uc_open_with_reconnect("https://mail.tm/en/")
+        rnd = random.randint(1,9)
+        driver2.sleep(rnd)
+        driver2.refresh()
+        driver2.sleep(rnd)
+        kkk +=1
+        if kkk >= 10:
+            break
+    driver2.uc_click("div.truncate")
+    rnd = random.randint(2,5)
+    driver2.sleep(rnd)
+    email_text = driver2.get_text("h2[class*='text-2xl']")
+    sb.quit_extra_driver()
+    match = re.search(r"(\d{6})\s*-\s*Sign Up Verification Code", email_text)
+    if match:
+        verification_code = match.group(1)
+    sb.uc_gui_press_keys("input[name='code']", verification_code)
+    sb.uc_click("button[type='submit']")
 display.stop()
