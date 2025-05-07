@@ -8,6 +8,7 @@ from seleniumbase import SB
 def generate_random_birth_date(self):
     today = datetime.date.today()
     # Helper function to subtract years while handling leap year issues.
+    
     def subtract_years(date, years):
         try:
             return date.replace(year=date.year - years)
@@ -65,6 +66,4 @@ with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
         sb.sleep(rnd)
         kkk += 1
         if kkk == 5:
-            break
-    
-    
+            break  
