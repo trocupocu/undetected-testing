@@ -52,7 +52,7 @@ def generate_strong_password(length=12):
     return ''.join(password_chars)
 
 
-with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
+with SB(uc=True, test=True, locale_code="en") as sb:
     url = "https://kick.com/brutalles"
     sb.activate_cdp_mode(url)
     rnd = random.randint(4, 7)
@@ -65,7 +65,7 @@ with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
     kkk = 0
     while not sb.is_element_present('button:contains("Sign Up")'):
         sb.uc_gui_click_captcha()
-        rnd = random.randint(10, 30)
+        rnd = random.randint(1, 10)
         sb.sleep(rnd)
         kkk += 1
         if kkk == 5:
