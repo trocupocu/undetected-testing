@@ -1,7 +1,7 @@
 from seleniumbase import SB
 
 with SB(uc=True, test=True, locale_code="en") as sb:
-    url = "https://gitlab.com/users/sign_in"
+    url = "https://kick.com/browse"
     sb.uc_open_with_reconnect(url, 5)
     sb.uc_gui_click_captcha()
     sb.sleep(2)
