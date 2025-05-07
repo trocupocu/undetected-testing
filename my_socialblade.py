@@ -57,7 +57,7 @@ display = Display(visible=0, size=(1440, 1880))
 display.start()
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/brutalles"
-    sb.activate_cdp_mode(url)
+    sb.activate_cdp_mode(url, platform=(windows))
     rnd = random.randint(4, 7)
     sb.sleep(rnd)
     sb.uc_gui_click_captcha()
