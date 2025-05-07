@@ -1,7 +1,7 @@
 from seleniumbase import SB
 
 with SB(uc=True, test=True, locale_code="en") as sb:
-    url = "https://kick.com/browse"
+    url = "https://www.youtube.com/@PewDiePie/videos"
     sb.activate_cdp_mode(url)
     sb.uc_gui_click_captcha()
     sb.assert_text("Username", '[for="user_login"]', timeout=3)
