@@ -62,8 +62,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         platform='Win32',
         user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                     "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/135.0.0.0 Safari/537.36"
-                   )
+                    "Chrome/135.0.0.0 Safari/537.36")                   
     )
     rnd = random.randint(4, 7)
     sb.sleep(rnd)
