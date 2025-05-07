@@ -1,27 +1,40 @@
-"""Bypass bot-detection to view SocialBlade ranks for YouTube"""
+import random
+def generate_strong_password(length=12):
+    if length < 8:
+        raise ValueError("")
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    digits = string.digits
+    punctuation = string.punctuation
+    password_chars = [
+        secrets.choice(lower),
+        secrets.choice(upper),
+        secrets.choice(digits),
+        secrets.choice(punctuation)
+    ]
+    if length > 4:
+        all_characters = lower + upper + digits + punctuation
+        password_chars.extend(secrets.choice(all_characters) for _ in range(length - 4))
+    secrets.SystemRandom().shuffle(password_chars)
+    return ''.join(password_chars)
 from seleniumbase import SB
 
 with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
-    url = "https://socialblade.com/youtube/channel/UCSQElO8vQmNPuTgdd83BHdw"
+    url = "https://kick.com/browse"
     sb.activate_cdp_mode(url)
-    sb.sleep(2)
+    rnd = random.randint(4,7)
+    sb.sleep(rnd)
     sb.uc_gui_click_captcha()
-    sb.sleep(1.5)
-    sb.cdp.remove_elements("#lngtd-top-sticky")
-    sb.sleep(1.5)
-    name = sb.cdp.get_text("h1")
-    source = sb.get_page_source()
-    base = "https://www.youtube.com/c/"
-    base2 = 'href="/youtube/c/'
-    start = source.find(base2) + len(base2)
-    end = source.find('"', start)
-    link = base + source[start:end]
-    print("********** SocialBlade Stats for %s: **********" % name)
-    print(">>> (Link: %s) <<<" % link)
-    print(sb.get_text('[class*="grid lg:hidden"]'))
-    print("********** SocialBlade Ranks: **********")
-    print(sb.get_text('[class*="gap-3 flex-1"]'))
-    for i in range(17):
-        sb.cdp.scroll_down(6)
-        sb.sleep(0.1)
-    sb.sleep(2)
+    try:
+        sb.cdp.mouse_click('button:contains("Accept")')
+    except:
+        print()
+    while not sb.is_element_present('button:contains("Sign Up")'):
+        sb.uc_gui_click_captcha()
+        rnd = random.randint(10,30)
+        sb.sleep(rnd)
+        kkk +=1
+        if kkk == 5:
+            break
+    
+    
