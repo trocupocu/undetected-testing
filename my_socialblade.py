@@ -4,6 +4,7 @@ import secrets
 import datetime
 import os
 from seleniumbase import SB
+from sbvirtualdisplay import Display
 
 
 MONGO_URI = os.getenv("MONGO_URI")
@@ -52,7 +53,9 @@ def generate_strong_password(length=12):
     return ''.join(password_chars)
 
 
-with SB(uc=True, test=True, locale_code="en") as sb:
+display = Display(visible=0, size=(1440, 1880))
+display.start()
+with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/brutalles"
     sb.activate_cdp_mode(url)
     rnd = random.randint(4, 7)
@@ -71,3 +74,4 @@ with SB(uc=True, test=True, locale_code="en") as sb:
         if kkk == 5:
             sb.cdp.save_screenshot("screenshot.png")
             break
+display.stop()
