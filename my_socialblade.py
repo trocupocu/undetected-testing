@@ -3,9 +3,10 @@ import string
 import secrets
 import datetime
 from seleniumbase import SB
+
+
 def generate_random_birth_date(self):
     today = datetime.date.today()
-    
     # Helper function to subtract years while handling leap year issues.
     def subtract_years(date, years):
         try:
@@ -13,19 +14,15 @@ def generate_random_birth_date(self):
         except ValueError:
             # Handles the case for February 29th in non-leap years
             return date.replace(month=2, day=28, year=date.year - years)
-    
     # Calculate the start and end dates for the valid birth date range.
     start_date = subtract_years(today, 70)  # 70 years ago
     end_date = subtract_years(today, 18)    # 18 years ago
-    
     # Determine the total number of days between the start and end dates.
     days_between = (end_date - start_date).days
     # Pick a random number of days to add to the start date.
     random_days = random.randint(0, days_between)
-    
     # Generate the random birth date.
     random_birth_date = start_date + datetime.timedelta(days=random_days)
-    
     # Return the date as a string formatted as "MMDDYYYY"
     return random_birth_date.strftime("%m%d%Y")
 
