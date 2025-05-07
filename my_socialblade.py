@@ -74,7 +74,7 @@ def generate_gamer_username():
     if random.choice([True, False]):
         randomized_noun = chosen_noun.upper()
     else:
-        randomized_noun = chosen_noun.lower()   
+        randomized_noun = chosen_noun.lower()
     if random.choice([True, False]):
         if random.choice([True, False]):
             randomized_adj = random.randint(0, 9)
@@ -85,7 +85,7 @@ def generate_gamer_username():
     # Format the number with leading zeros for consistency.
     username1 = f"{randomized_adj}{randomized_noun}{number:02d}"
     if random.choice([True, False]):
-        username = username1.upper() 
+        username = username1.upper()
     else:
         username1.lower()
     return username
