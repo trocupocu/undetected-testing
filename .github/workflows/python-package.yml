@@ -85,6 +85,12 @@ jobs:
     - name: Run python raw_gitlab.py --debug
       run: |
         python raw_gitlab_uc.py --debug --screenshot
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+          name: latest_logs
+          path: latest_logs/
+          retention-days: 30
     - name: Run python raw_socialblade.py --debug --ignore=errors 
       run: |
         python my_socialblade.py --debug --chrome --xvfb --screenshot
