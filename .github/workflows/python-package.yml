@@ -53,7 +53,6 @@ jobs:
         # Stop the build if there are flake8 issues
         flake8 . --count --show-source --statistics --exclude=temp
     - name: Install Chrome
-      if: matrix.os == 'ubuntu-20.04'
       run: |
         sudo apt install google-chrome-stable
     - name: Check the console scripts interface
@@ -88,7 +87,7 @@ jobs:
         python raw_cdp.py --debug
     - name: Run python raw_socialblade.py --debug --ignore=errors 
       run: |
-        python my_socialblade.py --debug --xvfb --screenshot
+        python my_socialblade.py --debug --chrome --xvfb --screenshot
     - uses: actions/upload-artifact@v4
       if: always()
       with:
