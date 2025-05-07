@@ -67,6 +67,8 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     rnd = random.randint(4, 7)
     sb.sleep(rnd)
     sb.uc_gui_click_captcha()
+    sb.sleep(2)
+    sb.uc_gui_handle_captcha()
     try:
         sb.cdp.mouse_click('button:contains("Accept")')
     except Exception as e:
@@ -74,6 +76,8 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     kkk = 0
     while not sb.is_element_present('button:contains("Sign Up")'):
         sb.uc_gui_click_captcha()
+        sb.sleep(2)
+        sb.uc_gui_handle_captcha()
         sb.cdp.save_screenshot("ssasa.png", folder='./latest_logs')
         rnd = random.randint(1, 10)
         sb.sleep(rnd)
