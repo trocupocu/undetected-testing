@@ -84,7 +84,7 @@ jobs:
         python raw_uc_mode.py --debug --ignore=errors 
     - name: Run python raw_gitlab.py --debug
       run: |
-        python raw_gitlab_uc.py --debug
+        python raw_gitlab_uc.py --debug --screenshot
     - name: Run python raw_socialblade.py --debug --ignore=errors 
       run: |
         python my_socialblade.py --debug --chrome --xvfb --screenshot
