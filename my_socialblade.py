@@ -5,17 +5,16 @@ import datetime
 from seleniumbase import SB
 
 
+def subtract_years(date, years):
+    try:
+        return date.replace(year=date.year - years)
+    except ValueError:
+        # Handles the case for February 29th in non-leap years
+        return date.replace(month=2, day=28, year=date.year - years)
+
+
 def generate_random_birth_date(self):
     today = datetime.date.today()
-    # Helper function to subtract years while handling leap year issues.
-    
-    def subtract_years(date, years):
-        try:
-            return date.replace(year=date.year - years)
-        except ValueError:
-            # Handles the case for February 29th in non-leap years
-            return date.replace(month=2, day=28, year=date.year - years)
-    # Calculate the start and end dates for the valid birth date range.
     start_date = subtract_years(today, 70)  # 70 years ago
     end_date = subtract_years(today, 18)    # 18 years ago
     # Determine the total number of days between the start and end dates.
@@ -66,4 +65,4 @@ with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
         sb.sleep(rnd)
         kkk += 1
         if kkk == 5:
-            break  
+            break
