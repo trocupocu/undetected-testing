@@ -4,7 +4,7 @@ with SB(uc=True, test=True, locale_code="en") as sb:
     url = "https://kick.com/browse"
     sb.activate_cdp_mode(url)
     sb.sleep(2)
-    sb.uc_gui_handle_captcha()
+    sb.cdp.gui_click_x_y(236.0, 429.0)
     sb.assert_text("Username", '[for="user_login"]', timeout=3)
     sb.assert_element('label[for="user_login"]')
     sb.highlight('button:contains("Sign in")')
