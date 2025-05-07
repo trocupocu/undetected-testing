@@ -69,4 +69,5 @@ with SB(uc=True, test=True, ad_block=True, pls="none") as sb:
         sb.sleep(rnd)
         kkk += 1
         if kkk == 5:
+            sb.cdp.save_screenshot("screenshot.png")
             break
