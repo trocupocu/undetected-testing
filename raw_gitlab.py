@@ -3,6 +3,8 @@ import string
 import secrets
 import logging
 import datetime
+from sbvirtualdisplay import Display
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -156,7 +158,8 @@ from seleniumbase import BaseCase
 import pyautogui
 CDPMethods.gui_drag_and_drop = slower_gui_drag_and_drop
 BaseCase.main(__name__, __file__)
-
+display = Display(visible=0, size=(1440, 1880))
+display.start()
 class MyTestClass(BaseCase):
 
     def generate_gamer_username(self):
@@ -877,7 +880,7 @@ class MyTestClass(BaseCase):
                 self.sleep(rnd)
                 self.cdp.mouse_click('button:contains("Follow")')'''
         assert True
-
+display.stop()
 
 
 
