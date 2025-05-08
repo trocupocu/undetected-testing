@@ -151,7 +151,8 @@ def generate_strong_password(length=12):
     secrets.SystemRandom().shuffle(password_chars)
     return ''.join(password_chars)
 
-
+display = Display(visible=0, size=(1440, 1880))
+display.start()
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/browse"
     sb.activate_cdp_mode(url)
@@ -284,3 +285,4 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     cookie_value = sb.execute_cdp_cmd('Storage.getCookies', cmd_args={})
     print(cookie_value)
     inserted_id = insert_cookie(cookie_value)
+display.stop()
