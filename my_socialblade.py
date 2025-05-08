@@ -154,18 +154,19 @@ def generate_strong_password(length=12):
 
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/browse"
-    sb.uc_open_with_reconnect(url, 5)
+    sb.activate_cdp_mode(url)
     rnd = random.randint(0, 7)
     sb.sleep(rnd)
     sb.uc_gui_click_captcha()
     sb.sleep(2)
+    sb.connect()
     sb.uc_gui_handle_captcha()
     try:
         sb.uc_click('button:contains("Accept")', reconnect_time=4)
     except Exception as e:
         print(e)
     kkk = 0
-    while not sb.is_element_present('button:contains("Sign Up")'):
+    while not sb.cdp.find_element('button:contains("Sign Up")'):
         sb.uc_gui_click_captcha()
         sb.sleep(2)
         sb.uc_gui_handle_captcha()
@@ -197,29 +198,29 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     sb.sleep(2)
     sb.uc_gui_handle_captcha()
     sb.bring_active_window_to_front()
-    xelem = sb.click('input[autocomplete="email"]')
+    xelem = sb.cdp.click('input[autocomplete="email"]')
     sb.uc_gui_press_keys(email_value)
-    xelem = sb.click("input[name='username']")
+    xelem = sb.cdp.click("input[name='username']")
     sb.uc_gui_press_keys(generate_gamer_username())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    xelem = sb.click("input[name='birthdate']")
+    xelem = sb.cdp.click("input[name='birthdate']")
     sb.uc_gui_press_keys(generate_random_birth_date())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    xelem = sb.click("input[name='password']")
+    xelem = sb.cdp.click("input[name='password']")
     sb.uc_gui_press_keys(generate_strong_password())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
     if sb.is_element_present("p.text-danger-lower"):
         rnd = random.randint(5, 15)
         random_letter = random.choice(string.ascii_uppercase)
-        xelem = sb.click("input[name='username']")
+        xelem = sb.cdp.click("input[name='username']")
         sb.uc_gui_press_keys(f"{generate_gamer_username()}")
         sb.sleep(rnd)
     kkk = 0
     while not sb.is_element_present("input[name='code']"):
-        sb.uc_click('button:contains("Sign Up")', reconnect_time=4)
+        xelem = sb.cdp.click('[data-test="sign-up-submit"]')
         rnd = random.randint(5, 15)
         sb.sleep(rnd)
         kkk += 1
@@ -274,10 +275,10 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         kkk += 1
         if kkk >= 50:
             break
-    sb.uc_click('button:contains("I accept")', reconnect_time=4)
+    sb.click("button[type='submit']")
     rnd = random.randint(10, 15)
     sb.sleep(rnd)
-    sb.uc_click('button:contains("Get Started")', reconnect_time=4)
+    sb.click("//button[contains(text(), 'Get Started')]")
     rnd = random.randint(10, 15)
     sb.sleep(rnd)
     cookie_value = sb.execute_cdp_cmd('Storage.getCookies', cmd_args={})
