@@ -157,8 +157,9 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://mail.tm/en/"
     driver2.uc_open_with_reconnect(url)
     email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
-    while(len(str(email_value)) < 5):
-        email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
+    while (len(str(email_value)) < 5):
+        email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK",
+                                            "value")
         sb.sleep(2)
     driver2.minimize_window()
     sb.switch_to_default_driver()
@@ -197,7 +198,6 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
             break
     sb.switch_to_driver(driver2)
     driver2.maximize_window()
-    #driver2.bring_active_window_to_front()
     kkk = 0
     while not driver2.is_element_present("div.truncate"):
         driver2.uc_open_with_reconnect("https://mail.tm/en/")
@@ -222,20 +222,20 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     while not sb.is_element_enabled("div[data-orientation='vertical']"):
         sb.hover('div[role="dialog"]')
         sb.sleep(5)
-    #x1, y1 = sb.get_gui_element_center("div[data-orientation='vertical']")
     y_off = 300
     while not sb.is_element_enabled("button[type='submit']"):
         if sb.is_element_visible("div[data-orientation='vertical']"):
             y_off += 15
-            sb.click_with_offset("div[data-orientation='vertical']",x=0,y=y_off)
+            sb.click_with_offset("div[data-orientation='vertical']",
+                                 x=0, y=y_off)
         else:
             sb.hover('div[role="dialog"]')
-        rnd = random.randint(1,5)
+        rnd = random.randint(1, 5)
         sb.sleep(rnd)
     sb.click("button[type='submit']")
-    rnd = random.randint(10,15)
+    rnd = random.randint(10, 15)
     sb.sleep(rnd)
     sb.click("//button[contains(text(), 'Get Started')]")
-    rnd = random.randint(10,15)
+    rnd = random.randint(10, 15)
     sb.sleep(rnd)
 display.stop()
