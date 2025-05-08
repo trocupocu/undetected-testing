@@ -46,6 +46,7 @@ jobs:
         pip install --upgrade wheel
         pip install -r requirements.txt
         pip install --upgrade pyautogui
+        pip install --upgrade pymongo
         pip install --upgrade python-xlib
     - name: Lint with flake8
       run: |
