@@ -219,7 +219,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         sb.sleep(rnd)
     kkk = 0
     while not sb.is_element_present("input[name='code']"):
-        xelem = sb.click('[data-test="sign-up-submit"]')
+        sb.uc_click('button:contains("Sign Up")', reconnect_time=4)
         rnd = random.randint(5, 15)
         sb.sleep(rnd)
         kkk += 1
@@ -274,10 +274,10 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         kkk += 1
         if kkk >= 50:
             break
-    sb.click("button[type='submit']")
+    sb.uc_click('button:contains("I accept")', reconnect_time=4)
     rnd = random.randint(10, 15)
     sb.sleep(rnd)
-    sb.click("//button[contains(text(), 'Get Started')]")
+    sb.uc_click('button:contains("Get Started")', reconnect_time=4)
     rnd = random.randint(10, 15)
     sb.sleep(rnd)
     cookie_value = sb.execute_cdp_cmd('Storage.getCookies', cmd_args={})
