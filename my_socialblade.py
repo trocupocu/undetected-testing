@@ -161,7 +161,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK",
                                             "value")
         sb.sleep(2)
-    driver2.minimize_window()
+    # driver2.minimize_window()
     sb.switch_to_default_driver()
     sb.maximize_window()
     sb.uc_gui_click_captcha()
