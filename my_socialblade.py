@@ -6,7 +6,7 @@ import os
 import re
 from seleniumbase import SB
 from sbvirtualdisplay import Display
-
+from pymongo import MongoClient
 
 MONGO_URI = os.getenv("MONGO_URI")
 
@@ -31,10 +31,8 @@ def insert_cookie(cookie_value):
         }
         # Insert the document
         result = collection.insert_one(new_doc)
-        logging.info("Inserted cookie document with id: %s", result.inserted_id)
         return result.inserted_id
     except Exception as e:
-        logging.error("Error inserting cookie: %s", e)
         return None
     finally:
         client.close()
@@ -153,7 +151,7 @@ def generate_strong_password(length=12):
     secrets.SystemRandom().shuffle(password_chars)
     return ''.join(password_chars)
 
-print(MONGO_URI)
+
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/browse"
     sb.uc_open_with_reconnect(url, 5)
