@@ -10,6 +10,34 @@ from sbvirtualdisplay import Display
 
 MONGO_URI = os.getenv("MONGO_URI")
 
+def insert_cookie(cookie_value):
+    """
+    Connects to the 'trocu' database and inserts a new document into the 'cookiesk' collection.
+    The document contains:
+    - 'cookies': the provided cookie_value.
+    - 'is_locked': set to False by default.
+    
+    Returns the inserted document's ID or None if an error occurs.
+    """
+    MONGO_URI = os.getenv("MONGO_URI")
+    try:
+        client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=True)
+        db = client["trocu"]
+        collection = db["cookiesk"]
+        # Build the document to insert
+        new_doc = {
+            "cookies": cookie_value,
+            "is_locked": False
+        }
+        # Insert the document
+        result = collection.insert_one(new_doc)
+        logging.info("Inserted cookie document with id: %s", result.inserted_id)
+        return result.inserted_id
+    except Exception as e:
+        logging.error("Error inserting cookie: %s", e)
+        return None
+    finally:
+        client.close()
 
 def subtract_years(date, years):
     try:
@@ -87,7 +115,7 @@ def generate_gamer_username():
     if random.choice([True, False]):
         username = username1.upper()
     else:
-        username1.lower()
+        username = username1.lower()
     return username
 
 
@@ -125,9 +153,7 @@ def generate_strong_password(length=12):
     secrets.SystemRandom().shuffle(password_chars)
     return ''.join(password_chars)
 
-
-display = Display(visible=0, size=(1440, 1880))
-display.start()
+print(MONGO_URI)
 with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://kick.com/browse"
     sb.uc_open_with_reconnect(url, 5)
@@ -154,16 +180,21 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
             break
     sb.uc_click('button:contains("Sign Up")', reconnect_time=4)
     driver2 = sb.get_new_driver(undetectable=True)
+    sb.disconnect()
+    driver2.connect()
     url = "https://mail.tm/en/"
     driver2.uc_open_with_reconnect(url)
     email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
-    while (len(str(email_value)) < 5):
-        email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK",
-                                            "value")
+    kkk = 0
+    while(len(str(email_value)) < 5):
+        email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
         sb.sleep(2)
+    driver2.disconnect()
+    sb.connect()
     # driver2.minimize_window()
     sb.switch_to_default_driver()
-    sb.maximize_window()
+    # sb.connect()
+    # sb.maximize_window()
     sb.uc_gui_click_captcha()
     sb.sleep(2)
     sb.uc_gui_handle_captcha()
@@ -196,8 +227,8 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         kkk += 1
         if kkk >= 5:
             break
+    driver2.connect()
     sb.switch_to_driver(driver2)
-    driver2.maximize_window()
     kkk = 0
     while not driver2.is_element_present("div.truncate"):
         driver2.uc_open_with_reconnect("https://mail.tm/en/")
@@ -206,36 +237,50 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         driver2.refresh()
         driver2.sleep(rnd)
         kkk += 1
-        if kkk >= 10:
+        if kkk >= 5:
             break
-    driver2.click("div.truncate")
+    sb.bring_active_window_to_front()
+    # driver2.click("div.truncate")
     rnd = random.randint(2, 5)
     driver2.sleep(rnd)
-    email_text = driver2.get_text("h2[class*='text-2xl']")
+    email_text = driver2.get_text("div[class*='hidden md:block']")
+    print(email_text)
     sb.quit_extra_driver()
-    match = re.search(r"(\d{6})\s*-\s*Sign Up Verification Code", email_text)
-    if match:
-        verification_code = match.group(1)
+    sb.switch_to_default_driver()
+    sb.bring_active_window_to_front()
     sb.click("input[name='code']")
-    sb.uc_gui_press_keys(verification_code)
-    sb.click("button[type='submit']")
-    while not sb.is_element_enabled("div[data-orientation='vertical']"):
+    sb.uc_gui_press_keys(email_text)
+    #sb.click("button[type='submit']")
+    kkk = 0
+    while not sb.is_element_visible("div[data-orientation='vertical']"):
         sb.hover('div[role="dialog"]')
         sb.sleep(5)
-    y_off = 300
+        kkk += 1
+        if kkk >= 5:
+            break
+    # x1, y1 = sb.get_gui_element_center("div[data-orientation='vertical']")
+    y_off = random.randint(0, 200)
+    kkk = 0
     while not sb.is_element_enabled("button[type='submit']"):
         if sb.is_element_visible("div[data-orientation='vertical']"):
-            y_off += 15
-            sb.click_with_offset("div[data-orientation='vertical']",
-                                 x=0, y=y_off)
+            y_off += random.randint(1, 20)
+            try:
+                sb.click_with_offset("div[data-orientation='vertical']", x = 0, y = y_off)
+            except Exception as e:
+                print(e)
         else:
             sb.hover('div[role="dialog"]')
-        rnd = random.randint(1, 5)
+        rnd = random.uniform(0, 2)
         sb.sleep(rnd)
+        kkk += 1
+        if kkk >= 50:
+            break
     sb.click("button[type='submit']")
     rnd = random.randint(10, 15)
     sb.sleep(rnd)
     sb.click("//button[contains(text(), 'Get Started')]")
     rnd = random.randint(10, 15)
     sb.sleep(rnd)
-display.stop()
+    cookie_value = sb.execute_cdp_cmd('Storage.getCookies', cmd_args={})
+    print(cookie_value)
+    inserted_id = insert_cookie(cookie_value)
