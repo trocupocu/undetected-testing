@@ -228,7 +228,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     driver2.connect()
     sb.switch_to_driver(driver2)
     kkk = 0
-    while not driver2.is_element_present("div.truncate"):
+    while not driver2.is_element_present("div[class*='hidden md:block']"):
         driver2.uc_open_with_reconnect("https://mail.tm/en/")
         rnd = random.randint(1, 9)
         driver2.sleep(rnd)
