@@ -225,6 +225,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         kkk += 1
         if kkk >= 5:
             break
+    sb.save_screenshot("stackx.png", folder="./latest_logs")
     driver2.connect()
     sb.switch_to_driver(driver2)
     kkk = 0
