@@ -157,35 +157,47 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     url = "https://mail.tm/en/"
     driver2.uc_open_with_reconnect(url)
     email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
-    sb.uc_click("input[name='email']", reconnect_time=4)
+    while(len(str(email_value)) < 5):
+        email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
+        sb.sleep(2)
+    driver2.minimize_window()
+    sb.switch_to_default_driver()
+    sb.maximize_window()
+    sb.uc_gui_click_captcha()
+    sb.sleep(2)
+    sb.uc_gui_handle_captcha()
+    sb.bring_active_window_to_front()
+    xelem = sb.click('input[autocomplete="email"]')
     sb.uc_gui_press_keys(email_value)
-    sb.uc_click("input[name='username']", reconnect_time=4)
+    xelem = sb.click("input[name='username']")
     sb.uc_gui_press_keys(generate_gamer_username())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    sb.uc_click("input[name='birthdate']", reconnect_time=4)
+    xelem = sb.click("input[name='birthdate']")
     sb.uc_gui_press_keys(generate_random_birth_date())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
-    sb.uc_click("input[name='password']", reconnect_time=4)
+    xelem = sb.click("input[name='password']")
     sb.uc_gui_press_keys(generate_strong_password())
     rnd = random.randint(1, 5)
     sb.sleep(rnd)
     if sb.is_element_present("p.text-danger-lower"):
         rnd = random.randint(5, 15)
         random_letter = random.choice(string.ascii_uppercase)
-        sb.uc_click("input[name='username']", reconnect_time=4)
+        xelem = sb.click("input[name='username']")
         sb.uc_gui_press_keys(f"{generate_gamer_username()}")
         sb.sleep(rnd)
     kkk = 0
     while not sb.is_element_present("input[name='code']"):
-        sb.uc_click('[data-test="sign-up-submit"]')
-        rnd = random.randint(1, 17)
+        xelem = sb.click('[data-test="sign-up-submit"]')
+        rnd = random.randint(5, 15)
         sb.sleep(rnd)
         kkk += 1
         if kkk >= 5:
             break
-    driver2.refresh()
+    sb.switch_to_driver(driver2)
+    driver2.maximize_window()
+    #driver2.bring_active_window_to_front()
     kkk = 0
     while not driver2.is_element_present("div.truncate"):
         driver2.uc_open_with_reconnect("https://mail.tm/en/")
@@ -196,7 +208,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
         kkk += 1
         if kkk >= 10:
             break
-    driver2.uc_click("div.truncate")
+    driver2.click("div.truncate")
     rnd = random.randint(2, 5)
     driver2.sleep(rnd)
     email_text = driver2.get_text("h2[class*='text-2xl']")
@@ -204,7 +216,26 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     match = re.search(r"(\d{6})\s*-\s*Sign Up Verification Code", email_text)
     if match:
         verification_code = match.group(1)
-    sb.uc_click("input[name='code']", reconnect_time=4)
+    sb.click("input[name='code']")
     sb.uc_gui_press_keys(verification_code)
-    sb.uc_click("button[type='submit']", reconnect_time=4)
+    sb.click("button[type='submit']")
+    while not sb.is_element_enabled("div[data-orientation='vertical']"):
+        sb.hover('div[role="dialog"]')
+        sb.sleep(5)
+    #x1, y1 = sb.get_gui_element_center("div[data-orientation='vertical']")
+    y_off = 300
+    while not sb.is_element_enabled("button[type='submit']"):
+        if sb.is_element_visible("div[data-orientation='vertical']"):
+            y_off += 15
+            sb.click_with_offset("div[data-orientation='vertical']",x=0,y=y_off)
+        else:
+            sb.hover('div[role="dialog"]')
+        rnd = random.randint(1,5)
+        sb.sleep(rnd)
+    sb.click("button[type='submit']")
+    rnd = random.randint(10,15)
+    sb.sleep(rnd)
+    sb.click("//button[contains(text(), 'Get Started')]")
+    rnd = random.randint(10,15)
+    sb.sleep(rnd)
 display.stop()
