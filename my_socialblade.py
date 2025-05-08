@@ -188,6 +188,9 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     while(len(str(email_value)) < 5):
         email_value = driver2.get_attribute("#Dont_use_WEB_use_API_OK", "value")
         sb.sleep(2)
+        kkk += 1
+        if kkk >= 5:
+            break
     driver2.disconnect()
     sb.connect()
     # driver2.minimize_window()
