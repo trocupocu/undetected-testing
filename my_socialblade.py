@@ -162,6 +162,7 @@ with SB(uc=True, test=True, locale_code="en", headless=False) as sb:
     sb.sleep(2)
     sb.connect()
     sb.uc_gui_handle_captcha()
+    sys.exit(0)
     sb.cdp.click('button:contains("Accept")')
     kkk = 0
     while not sb.cdp.find_element('button:contains("Sign Up")'):
